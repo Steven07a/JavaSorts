@@ -251,7 +251,7 @@ class ArraySorts {
             // base case
         } else {
             // pivot = ThreadLocalRandom.current().nextInt(lf,rt);
-            pivot = randNum.nextInt(rt - lf) + lf;
+            pivot = randNum.nextInt((rt - lf) + 1) + lf;
             pivot = outsideInPartition(a, lf, rt, pivot);
             aqs1(a, lf, pivot - 1, cutoff);
             aqs1(a, pivot + 1, rt, cutoff);
@@ -271,7 +271,7 @@ class ArraySorts {
             pivot = randNum.nextInt((rt-lf)+1) + lf;
             swap(a, rt, pivot);
             //pivot = leftToRightPartition(a, lf, rt);
-            while(rtpt <= rt) {
+            while(rtpt != rt) {
                 if(a[rtpt] < a[rt]) {
                     swap(a, lfpt, rtpt);
                     swap(a, midpt, rtpt);
@@ -285,9 +285,6 @@ class ArraySorts {
                 } else if (a[rtpt] > a[rt]) {
                     rtpt++;
                 }
-            }
-            if(rtpt > rt) {
-                rtpt = rt;
             }
             swap(a, midpt, rtpt);
             aqs2(a, lf, lfpt-1, cutoff);
