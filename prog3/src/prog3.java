@@ -2,11 +2,7 @@
 // Get random numbers the way you did in the first program. I think most of you 
 // used the Random class. If you use the Random class be sure not to instantiate
 // multiple, unnecessary copies.
-import java.math.*;
-// maybe not needed?
-// or
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 // use this class to contain everything related to your sorts
 class ArraySorts {
@@ -146,7 +142,7 @@ class ArraySorts {
     }
 
     private static pair twoPivotPartition(int a[], int lfpt, int rtpt) {
-        int lastSmall = lfpt + 1, firstUnknown = lfpt + 1, firstBig = rtpt -1;
+        int lastSmall = lfpt + 1, firstUnknown = lfpt + 1, firstBig = rtpt - 1;
         if (a[lfpt] > a[rtpt]) {
             swap(a, lfpt, rtpt);
         }
@@ -218,7 +214,6 @@ class ArraySorts {
             int pivot,lfpt = lf, midpt = lf, rtpt = lf;
             pivot = randNum.nextInt((rt-lf)+1) + lf;
             swap(a, rt, pivot);
-            //pivot = leftToRightPartition(a, lf, rt);
             while(rtpt != rt) {
                 if(a[rtpt] < a[rt]) {
                     swap(a, lfpt, rtpt);
@@ -266,29 +261,10 @@ class ArraySorts {
         if ((rt - lf + 1) <= 1) {
             // base case
         } else {
-            // pivot = ThreadLocalRandom.current().nextInt(lf,rt+1);
-            int pivot,lfpt = lf, midpt = lf, rtpt = lf;
-            pivot = randNum.nextInt((rt-lf)+1) + lf;
-            swap(a, rt, pivot);
-            //pivot = leftToRightPartition(a, lf, rt);
-            while(rtpt != rt) {
-                if(a[rtpt] < a[rt]) {
-                    swap(a, lfpt, rtpt);
-                    swap(a, midpt, rtpt);
-                    lfpt++;
-                    midpt++;
-                    rtpt++;
-                } else if (a[rtpt] == a[rt]) {
-                    swap(a, midpt, rtpt);
-                    midpt++;
-                    rtpt++;
-                } else if (a[rtpt] > a[rt]) {
-                    rtpt++;
-                }
-            }
-            swap(a, midpt, rtpt);
-            aqs2(a, lf, lfpt-1, cutoff);
-            aqs2(a, midpt+1, rt, cutoff);
+            int pivot = randNum.nextInt((rt - lf) + 1) + lf;
+            pivot = outsideInPartition(a, lf, rt, pivot);
+            aqs2(a, lf, pivot - 1, cutoff);
+            aqs2(a, pivot + 1, rt, cutoff);
         }
     }
 
@@ -316,21 +292,67 @@ class ArraySorts {
                 }
 
                 p = twoPivotPartition(a, lf, rt);
-                qs3(a, lf, p.getLeft() - 1, cutoff);
-                qs3(a, p.getLeft() + 1, p.getRight() - 1, cutoff);
-                qs3(a, p.getRight() + 1, rt, cutoff);
+                aqs3(a, lf, p.getLeft() - 1, cutoff);
+                aqs3(a, p.getLeft() + 1, p.getRight() - 1, cutoff);
+                aqs3(a, p.getRight() + 1, rt, cutoff);
             }
         }
     }
 
     public static void HeapSortTD(int a[], int n) {
-
+        int count = 1;
+        while(count < n) {
+            heapifyTD(a, 0, count);
+            count++;
+        }
+        for(int i = n-1; i > 0; i--) {
+            swap(a, 0, i);
+            heapifyTD(a, 0, i-1);
+        }
+    }
+    private static void heapifyTD(int a[], int index, int size) {
+        int child = size;
+        while (child > index) {
+            int parent = (child - 1) / 2;
+            if (a[parent] < a[child]) {
+                swap(a, parent, child);
+                child = parent;
+            } else {
+                child = index-1;
+            }
+        }
     }
 
     public static void HeapSortBU(int a[], int n) {
+        for(int i = n/2 - 1; i >= 0; i--) {
+            heapifyBU(a, i, n);
+        }
 
+        for(int i = n-1; i > 0; i--) {
+            swap(a, 0, i);
+            heapifyBU(a, 0, i);
+        }
     }
 
+    private static void heapifyBU(int a[], int index, int size) {
+        int largestIndex = index;
+        int left = 2 * index + 1,right = 2 * index + 2;
+        //checks that the left index is still within array then checks if its less then the index given to us
+        if (left < size && a[left] > a[largestIndex]) {
+            largestIndex = left;
+        }
+
+        //checks that the right index is still within array then checks if its less then the index given to us
+        if (right < size && a[right] > a[largestIndex]) {
+            largestIndex = right;
+        }
+
+        //if the largestIndex is not equal to the index given then we found a new largest and need to swap them then recursivly repeat
+        if (largestIndex != index) {
+            swap(a, index, largestIndex);
+            heapifyBU(a, largestIndex, size);
+        }
+    }
     public static String myName() {
         return "Steven Herrera";
     }

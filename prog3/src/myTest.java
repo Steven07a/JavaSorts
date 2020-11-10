@@ -23,7 +23,8 @@ public class myTest {
             // for(int i = 0; i < arr.length; i++) {
             //     System.out.print(arr[i] + " ");
             // }
-            ArraySorts.AlmostQS2(arr, arr.length,2);
+            ArraySorts.HeapSortBU(arr, arr.length);
+            //BentleyMcIlroyPartioning.quicksort(arr, 0, arr.length-1);
             //System.out.print(k+1 + " ");
             shuffleArr.isSorted(arr, arr.length);
             //System.out.println();
