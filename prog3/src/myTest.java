@@ -8,8 +8,8 @@ public class myTest {
         //     System.out.print(a[i] + " ");
         // }
         // ArraySorts.AlmostQS1(a,a.length,2);
-        for(int k = 0; k < 100; k++) {
-            int randSize = 10;//ThreadLocalRandom.current().nextInt(29000,30001);
+        for(int k = 0; k < 10; k++) {
+            int randSize = 1000;//ThreadLocalRandom.current().nextInt(29000,30001);
 
             int arr[] = new int[randSize];
     

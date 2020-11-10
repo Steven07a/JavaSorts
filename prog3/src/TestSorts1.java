@@ -346,8 +346,8 @@ public class TestSorts1 {
 			ArraySorts.AlmostQS3(a, n, 2);
 		else if (which == 14)
 			ArraySorts.HeapSortTD(a, n);
-		// else if (which == 15)
-		// 	ArraySorts.HeapSortBU(a, n);
+		else if (which == 15)
+			ArraySorts.HeapSortBU(a, n);
 		else
 			System.out.println("No such sort " + which + ".");
 	}

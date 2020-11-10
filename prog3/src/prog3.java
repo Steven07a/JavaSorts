@@ -307,7 +307,8 @@ class ArraySorts {
         }
         for(int i = n-1; i > 0; i--) {
             swap(a, 0, i);
-            heapifyTD(a, 0, i-1);
+            //this essentially reheapefies the array
+            heapifyBU(a, 0, i);
         }
     }
     private static void heapifyTD(int a[], int index, int size) {
