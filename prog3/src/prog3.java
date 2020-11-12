@@ -25,57 +25,72 @@ class ArraySorts {
     }
 
     private static void qs1(int a[], int lf, int rt, int cutoff) {
-        int pivot = 0;
-        if ((rt - lf + 1) < cutoff) {
-            // base case let insertionsort take care of it 
-        } else {
-            // gets us a random number
+        // int pivot = 0;
+        // if ((rt - lf + 1) < cutoff) {
+        //     // base case let insertionsort take care of it 
+        // } else {
+        //     // gets us a random number
+        //     pivot = randNum.nextInt((rt - lf) + 1) + lf;
+        //     pivot = outsideInPartition(a, lf, rt, pivot);
+        //     //pair p = outsideInPartition(a, lf, rt, pivot);
+        //     qs1(a, lf, pivot - 1, cutoff);
+        //     qs1(a, pivot + 1, rt, cutoff);
+        // }
+        int pivot, lfpt, rtpt;
+        while((rt - lf + 1) >= cutoff) {
             pivot = randNum.nextInt((rt - lf) + 1) + lf;
-            //pivot = outsideInPartition(a, lf, rt, pivot);
-            pair p = outsideInPartition(a, lf, rt, pivot);
-            qs1(a, lf, p.getLeft() - 1, cutoff);
-            qs1(a, p.getRight() + 1, rt, cutoff);
+            pivot = outsideInPartition(a, lf, rt, pivot);
+            lfpt = pivot + 1;
+            rtpt = pivot - 1;
+            
+            if ((rtpt - lf) < (rt - lfpt)) {
+                qs1(a, lf, rtpt, cutoff);
+                lf = lfpt;
+            } else {
+                qs1(a, lfpt, rt, cutoff);
+                rt = rtpt;
+            }
         }
     }
 
-    // private static int outsideInPartition(int a[], int lf, int rt, int pivot) {
-    //     int lfpt = lf + 1, rtpt = rt;
-    //     swap(a, lf, pivot);
-    //     while (lfpt <= rtpt) {
-    //         if (a[lfpt] >= a[lf]) {
-    //             if (a[rtpt] <= a[lf]) {
-    //                 swap(a, lfpt, rtpt);
-    //                 lfpt++;
-    //                 rtpt--;
-    //             } else {
-    //                 rtpt--;
-    //             }
-    //         } else {
+    // private static pair outsideInPartition(int a[], int lf, int rt, int pivot) {
+    //     int lfpt = lf, index = lf, end = rt;
+    //     int partitionValue = a[pivot];
+
+    //     while(index <= end) {
+    //         if(a[index] < partitionValue) {
+    //             swap(a, index, lfpt);
+    //             index++;
     //             lfpt++;
+    //         } else if (a[index] == partitionValue) {
+    //             index++;
+    //         } else if (a[index] > partitionValue) {
+    //             swap(a, index, end);
+    //             end--;
     //         }
     //     }
-    //     pivot = rtpt;
-    //     swap(a, lf, rtpt);
-    //     return pivot;
+    //     return new pair(lfpt,end);
     // }
 
-    private static pair outsideInPartition(int a[], int lf, int rt, int pivot) {
-        int lfpt = lf, index = lf, end = rt;
-        int partitionValue = a[pivot];
-
-        while(index <= end) {
-            if(a[index] < partitionValue) {
-                swap(a, index, lfpt);
-                index++;
+    private static int outsideInPartition(int a[], int lf, int rt, int pivot) {
+        int lfpt = lf+1, rtpt = rt;
+        swap(a, lf, pivot);
+        while(lfpt <= rtpt) {
+            if(a[lfpt] >= a[lf]) {
+                if(a[rtpt] <= a[lf]) {
+                    swap(a, lfpt, rtpt);
+                    lfpt++;
+                    rtpt--;
+                } else {
+                    rtpt--;
+                }
+            } else {
                 lfpt++;
-            } else if (a[index] == partitionValue) {
-                index++;
-            } else if (a[index] > partitionValue) {
-                swap(a, index, end);
-                end--;
             }
         }
-        return new pair(lfpt,end);
+        pivot = rtpt;
+        swap(a, lf, rtpt);
+        return pivot;
     }
 
     public static void QuickSort2(int a[], int n, int cutoff) {
@@ -84,90 +99,36 @@ class ArraySorts {
     }
 
     private static void qs2(int a[],int lf,int rt,int cutoff) {
-        if((rt - lf + 1) < cutoff) {
-            //base case
-        } else {
-            int pivot = randNum.nextInt((rt-lf)+1) + lf;
-            pair p = outsideInPartition(a, lf, rt,pivot);
-            //pivot = leftToRightPartition(a, lf, rt, pivot);
-            qs2(a, lf, p.getLeft()-1, cutoff);
-            qs2(a, p.getRight()+1, rt, cutoff);
-            //qs2(a, lf, pivot-1, cutoff);
-            //qs2(a, pivot+1, rt, cutoff);
+        int pivot, lfpt, rtpt;
+        while ((rt - lf + 1) >= cutoff) { // partition is big – sort it
+            pivot = lf + (int) (Math.random() * (rt - lf + 1));
+            pivot = leftToRightPartition(a, lf, rt, pivot);
+            lfpt = pivot + 1;
+            rtpt = pivot - 1;
+            if ((rtpt - lf) < (rt - lfpt)) { // find the smaller partition
+                qs2(a, lf, rtpt, cutoff);
+                lf = lfpt;
+            } else {
+                qs2(a, lfpt, rt, cutoff);
+                rt = rtpt;
+            }
         }
     }
 
     private static int leftToRightPartition(int a[], int lf, int rt, int pivot) {
-        int lfpt = lf, equalCount = lf;
+        int lfpt = lf;
         // swapping the pivot item to end
         swap(a, rt, pivot);
         for (int i = lfpt; i < rt; i++) {
-            if (a[i] <= a[rt]) {
+            if (a[i] < a[rt]) {
                 swap(a, i, lfpt);
                 lfpt++;
             } 
-            if (a[i] == a[rt]) {
-                equalCount++;
-            }
-        }
-        if(equalCount == rt) {
-            pivot = equalCount;
-        } else {
-            pivot = lfpt;
         }
        
-        swap(a, rt, pivot);
-        return pivot;
+        swap(a, rt, lfpt);
+        return lfpt;
     }
-
-    // private static pair leftToRightPartition(int a[], int lf, int rt, int pivot) {
-    //     int lfpt = lf, equalCount = 0;
-    //     // swapping the pivot item to end
-    //     swap(a, rt, pivot);
-    //     for (int i = lfpt; i < rt; i++) {
-    //         if (a[i] <= a[rt]) {
-    //             swap(a, i, lfpt);
-    //             lfpt++;
-    //         }
-    //         if (a[i] == a[rt]) {
-    //             equalCount++;
-    //         }
-    //     }
-    //     // if(equalCount == rt) {
-    //     //     pivot = equalCount;
-    //     // } else {
-    //     //     pivot = lfpt;
-    //     // }
-    //     pivot = lfpt;
-    //     equalCount = pivot - equalCount;
-    //     swap(a, rt, pivot);
-    //     return new pair(equalCount,pivot);
-    // }
-
-    // private static pair leftToRightPartition(int a[], int lf, int rt, int pivot) {
-    //     int lfpt = lf, midpt = lf, index = lf;
-    //         //moves the pivot to the end of the array
-    //         swap(a, rt, pivot);
-    //         while(index != rt) {
-    //             //if an item is less then the pivot then swap it
-    //             if(a[index] < a[rt]) {
-    //                 swap(a, lfpt, index);
-    //                 //swap(a, midpt, index);
-    //                 lfpt++;
-    //                 midpt++;
-    //                 index++;
-    //             //if its equal to it then increment the midpt and rightpt 
-    //             } else if (a[index] == a[rt]) {
-    //                 swap(a, midpt, index);
-    //                 midpt++;
-    //                 index++;
-    //             } else if (a[index] > a[rt]) {
-    //                 index++;
-    //             }
-    //         }
-    //         swap(a, midpt, index);
-    //         return new pair(lfpt,midpt);
-    // }
 
     public static void QuickSort3(int a[], int n, int cutoff) {
         qs3(a, 0, n - 1, cutoff);
@@ -233,31 +194,58 @@ class ArraySorts {
     }
 
     private static void qs4(int a[], int lf, int rt, int cutoff) {
-        if ((rt - lf + 1) < cutoff) {
-            // base case
-        } else {
-            int pivot,lfpt = lf, midpt = lf, rtpt = rt-1;
+        // if ((rt - lf + 1) < cutoff) {
+        //     // base case
+        // } else {
+        //     int pivot,lfpt = lf, midpt = lf, rtpt = rt-1;
+        //     pivot = lf;
+        //     swap(a, rt, pivot);
+        //     //pivot = leftToRightPartition(a, lf, rt);
+        //     while(rtpt > midpt) {
+        //         if(a[rtpt] < a[rt]) {
+        //             swap(a, lfpt, rtpt);
+        //             //swap(a, midpt, rtpt);
+        //             lfpt++;
+        //             midpt++;
+        //             //rtpt--;
+        //         } else if (a[rtpt] == a[rt]) {
+        //             swap(a, midpt, rtpt);
+        //             midpt++;
+        //             //rtpt--;
+        //         } else if (a[rtpt] > a[rt]) {
+        //             rtpt--;
+        //         }
+        //     }
+        //     swap(a, midpt, rtpt);
+        //     qs4(a, lf, lfpt-1, cutoff);
+        //     qs4(a, midpt+1, rt, cutoff);
+        // }
+
+        // int pivot = 0;
+        // if ((rt - lf + 1) < cutoff) {
+        //     // base case
+        // } else {
+        //     // gets us a random number
+        //     pivot = lf;
+        //     //pivot = outsideInPartition(a, lf, rt, pivot);
+        //     pair p = outsideInPartition(a, lf, rt, pivot);
+        //     qs4(a, lf, p.getLeft() - 1, cutoff);
+        //     qs4(a, p.getRight() + 1, rt, cutoff);
+        // }
+        int pivot, lfpt, rtpt;
+        while((rt - lf + 1) >= cutoff) {
             pivot = lf;
-            swap(a, rt, pivot);
-            //pivot = leftToRightPartition(a, lf, rt);
-            while(rtpt > midpt) {
-                if(a[rtpt] < a[rt]) {
-                    swap(a, lfpt, rtpt);
-                    //swap(a, midpt, rtpt);
-                    lfpt++;
-                    midpt++;
-                    //rtpt--;
-                } else if (a[rtpt] == a[rt]) {
-                    swap(a, midpt, rtpt);
-                    midpt++;
-                    //rtpt--;
-                } else if (a[rtpt] > a[rt]) {
-                    rtpt--;
-                }
+            pivot = outsideInPartition(a, lf, rt, pivot);
+            lfpt = pivot + 1;
+            rtpt = pivot - 1;
+            
+            if ((rtpt - lf) < (rt - lfpt)) {
+                qs4(a, lf, rtpt, cutoff);
+                lf = lfpt;
+            } else {
+                qs4(a, lfpt, rt, cutoff);
+                rt = rtpt;
             }
-            swap(a, midpt, rtpt);
-            qs4(a, lf, lfpt-1, cutoff);
-            qs4(a, midpt+1, rt, cutoff);
         }
     }
 
@@ -267,86 +255,48 @@ class ArraySorts {
     }
 
     private static void qs5(int a[], int lf, int rt, int cutoff) {
-        if ((rt - lf + 1) < cutoff) {
-            // base case
-        } else {
-            int pivot = lf;
-            pair p = outsideInPartition(a, lf, rt, pivot);
-            qs5(a, lf, p.getLeft()-1, cutoff);
-            qs5(a, p.getRight()+1, rt, cutoff);
-            //pair p = leftToRightPartition(a, lf, rt, pivot);
-            // pivot = leftToRightPartition(a, lf, rt, pivot);
-            // qs5(a, lf, pivot-1, cutoff);
-            // qs5(a, pivot+1, rt, cutoff);
+        // if ((rt - lf + 1) < cutoff) {
+        //     // base case
+        // } else {
+        //     int pivot = lf;
+        //     pair p = outsideInPartition(a, lf, rt, pivot);
+        //     qs5(a, lf, p.getLeft()-1, cutoff);
+        //     qs5(a, p.getRight()+1, rt, cutoff);
+        //     //pair p = leftToRightPartition(a, lf, rt, pivot);
+        //     // pivot = leftToRightPartition(a, lf, rt, pivot);
+        //     // qs5(a, lf, pivot-1, cutoff);
+        //     // qs5(a, pivot+1, rt, cutoff);
+        // }
+
+        int pivot, lfpt, rtpt;
+        while ((rt - lf + 1) >= cutoff) { // partition is big – sort it
+            pivot = lf;
+            pivot = leftToRightPartition(a, lf, rt, pivot);
+            lfpt = pivot + 1;
+            rtpt = pivot;
+            if ((rtpt - lf) < (rt - lfpt)) { // find the smaller partition
+                qs5(a, lf, rtpt, cutoff);
+                lf = lfpt;
+            } else {
+                qs5(a, lfpt, rt, cutoff);
+                rt = rtpt;
+            }
         }
     }
 
     public static void AlmostQS1(int a[], int n, int cutoff) {
-        aqs1(a, 0, n - 1, cutoff);
+        qs1(a, 0, n - 1, cutoff);
         //insertionSort(a, n);
     }
 
-    private static void aqs1(int a[], int lf, int rt, int cutoff) {
-        int pivot = 0;
-        if ((rt - lf + 1) <= 1) {
-            // base case
-        } else {
-            // pivot = ThreadLocalRandom.current().nextInt(lf,rt);
-            pivot = randNum.nextInt((rt - lf) + 1) + lf;
-            //pivot = outsideInPartition(a, lf, rt, pivot);
-            pair p = outsideInPartition(a, lf, rt, pivot);
-            aqs1(a, lf, p.getLeft() - 1, cutoff);
-            aqs1(a, p.getRight() + 1, rt, cutoff);
-        }
-    }
-
     public static void AlmostQS2(int a[], int n, int cutoff) {
-        aqs2(a, 0, n - 1, cutoff);
-    }
-
-    private static void aqs2(int a[], int lf, int rt, int cutoff) {
-        if ((rt - lf + 1) <= 1) {
-            // base case
-        } else {
-            int pivot = randNum.nextInt((rt-lf)+1) + lf;
-            // pair p = leftToRightPartition(a, lf, rt, pivot);
-            // aqs2(a, lf, p.getLeft()-1, cutoff);
-            // aqs2(a, p.getRight()+1, rt, cutoff);
-            pivot = leftToRightPartition(a, lf, rt, pivot);
-            aqs2(a, lf, pivot-1, cutoff);
-            aqs2(a, pivot+1, rt, cutoff);
-        }
+        qs2(a, 0, n - 1, cutoff);
+        //insertionSort(a, n);
     }
 
     public static void AlmostQS3(int a[], int n, int cutoff) {
-        aqs3(a, 0, n - 1, cutoff);
-    }
-
-    private static void aqs3(int a[], int lf, int rt, int cutoff) {
-        int pivot1 = 0, pivot2 = 0;
-        pair p;
-        if (((rt - lf + 1) > 0)) {
-            if ((rt - lf + 1) <= 1) {
-                // base case call insertion sort
-            } else {
-                if (lf == rt - 1) {
-                    pivot1 = lf;
-                    pivot2 = rt;
-                } else {
-                    pivot1 = randNum.nextInt(rt - lf) + lf;
-                    // moves the first pivot number to the begining of our arr
-                    swap(a, lf, pivot1);
-                    // gets a random number excluding our first element
-                    pivot2 = randNum.nextInt(rt - lf) + lf + 1;
-                    swap(a, rt, pivot2);
-                }
-
-                p = twoPivotPartition(a, lf, rt);
-                aqs3(a, lf, p.getLeft() - 1, cutoff);
-                aqs3(a, p.getLeft() + 1, p.getRight() - 1, cutoff);
-                aqs3(a, p.getRight() + 1, rt, cutoff);
-            }
-        }
+        qs3(a, 0, n - 1, cutoff);
+        //insertionSort(a, n);
     }
 
     public static void HeapSortTD(int a[], int n) {

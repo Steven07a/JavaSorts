@@ -17,18 +17,20 @@ public class shuffleArr {
         a[change] = helper;
     }
 
-    public static void isSorted(int a[], int size) {
+    public static boolean isSorted(int a[], int size) {
+        boolean sorted = true;
         for(int i = 1; i < size; i++) {
             if(a[i-1] > a[i]) {
                 System.out.print("This array is not sorted:\n");
-                if(size < 20) {
-                    for(int k = 0; k < size; k++) {
-                        System.out.print(a[k] + " ");
-                    }
-                    System.out.println();   
-                }
+                // if(size < 20) {
+                //     for(int k = 0; k < size; k++) {
+                //         System.out.print(a[k] + " ");
+                //     }
+                //     System.out.println();   
+                // }
+                sorted = false;
                 break;
-            }
+            } 
         }
         // if(size < 51) {
         //     for(int k = 0; k < size; k++) {
@@ -37,5 +39,6 @@ public class shuffleArr {
         //     System.out.println();   
         // }
         System.out.println("This array is sorted!");
+        return sorted;
     }
 }
