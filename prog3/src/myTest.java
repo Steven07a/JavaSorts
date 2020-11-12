@@ -8,8 +8,8 @@ public class myTest {
         //     System.out.print(a[i] + " ");
         // }
         // ArraySorts.AlmostQS1(a,a.length,2);
-        for(int k = 0; k < 10; k++) {
-            int randSize = 1000;//ThreadLocalRandom.current().nextInt(29000,30001);
+        for(int k = 0; k < 100; k++) {
+            int randSize = 100000000;//ThreadLocalRandom.current().nextInt(29000,30001);
 
             int arr[] = new int[randSize];
     
@@ -23,7 +23,7 @@ public class myTest {
             // for(int i = 0; i < arr.length; i++) {
             //     System.out.print(arr[i] + " ");
             // }
-            ArraySorts.HeapSortBU(arr, arr.length);
+            ArraySorts.QuickSort5(arr, arr.length,2);
             //BentleyMcIlroyPartioning.quicksort(arr, 0, arr.length-1);
             //System.out.print(k+1 + " ");
             shuffleArr.isSorted(arr, arr.length);
