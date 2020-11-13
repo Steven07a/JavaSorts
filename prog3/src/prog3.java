@@ -1,6 +1,17 @@
 import java.util.Random;
+/*
+ * Author: Steven Herrera
+ * Class: CS 282 
+ * Meeting Time: M,W 3:30 - 4:45pm
+ * Assignment #3
+ * Project: Sorting alogithims
+ * Purpose: to create different implementations of quicksort and heapsort as well as test there times
+ *          
+ * 
+ * Date turned in: 11/12/20
+ * Notes: 
+ */
 
-// use this class to contain everything related to your sorts
 class ArraySorts {
     //a random number getter so i dont need to initilize one everytime 
     private static Random randNum = new Random();
